@@ -8,3 +8,8 @@ window.onload=function(){
 		return 'good';
 	};
 };
+
+
+function setColor(obj,attr){
+	return obj.currentStyle[attr];
+}
