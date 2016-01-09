@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>nxy</title>
+<style>
+*{margin:0;padding:0;list-style:none;}
+#ul1{width:680px; margin:30px auto;}
+#ul1 li{float:left;width:150px; height:150px; background:#ccc; margin:10px; line-height:150px; text-align:center;font-size:30px;}
+
+.box{ border:4px dashed red;}
+</style>
+<script src="domReady.js"></script>
+<script src="move.js"></script>
+<script>
+$(function(){
+	
+	var oUl = document.getElementById("ul1");
+	var aLi = oUl.children;
+	var len = aLi.length;
+	var zIndex = 1;
+	var aPos = [];
+	for(var i = 0; i < len; i++){
+		aPos[i] = {left:aLi[i].offsetLeft,top:aLi[i].offsetTop};
+		aLi[i].style.left = aPos[i].left +　"px";
+		aLi[i].style.top = aPos[i].top + "px";
+	}
+	
+	for(var i = 0; i < len; i++){
+		aLi[i].style.position = "absolute";
+		aLi[i].style.margin = "0";
+		drag(aLi[i]);
+		aLi[i].index = i;
+		aLi[i].innerHTML = i;
+	}
+	
+	function drag(obj){
+		
+		obj.onmousedown = function(ev){
+			var oEvent = ev || event;
+			var disX = oEvent.clientX - obj.offsetLeft;
+			var disY = oEvent.clientY - obj.offsetTop;
+			obj.style.zIndex = zIndex++;
+			clearInterval(obj.timer);
+			document.onmousemove = function(ev){
+				var oEvent = ev || event;
+				
+				obj.style.left = oEvent.clientX - disX + "px";
+				obj.style.top = oEvent.clientY - disY + "px"; 
+				
+				var oNear = findMin(obj);
+				
+				if(oNear && (obj != oNear)){
+					var tmp = obj.index;
+					obj.index = oNear.index;
+					oNear.index = tmp;
+					move(oNear,aPos[oNear.index]);
+				}
+				
+				
+			};
+			
+			document.onmouseup = function(){
+				document.onmousemove = null;
+				document.onmouseup = null;
+				obj.releaseCapture && obj.releaseCapture();
+				
+				
+				 move(obj,aPos[obj.index]);
+			};
+			obj.setCapture && obj.setCapture();
+			return false;	
+		};
+	}
+	
+
+	function findMin(obj){
+		var iMin = 99999999;
+		var iMinIndex = -1;
+		for(var i = 0; i < len; i++){
+			if(collTest(obj,aLi[i])){
+				var dis = getDis(obj,aLi[i]);
+				if(iMin > dis){
+					iMin = dis;
+					iMinIndex = i;
+				}
+				
+			}
+		}
+		
+		
+		if(iMinIndex == -1){
+			return null;
+		}
+		return aLi[iMinIndex];
+		
+	}	
+	
+	function getDis(obj1,obj2){
+		var a = obj1.offsetLeft - aPos[obj2.index].left;
+		var b = obj1.offsetTop - aPos[obj2.index].top;
+		
+		return Math.sqrt(a*a + b*b);
+	}
+	
+	function collTest(obj1,obj2){
+		var l1 = obj1.offsetLeft;
+		var t1 = obj1.offsetTop;
+		var r1 = l1 + obj1.offsetWidth;
+		var b1 = t1 + obj1.offsetHeight;
+		
+		
+		var l2 = aPos[obj2.index].left;
+		var t2 = aPos[obj2.index].top;
+		var r2 = l2 + obj2.offsetWidth;
+		var b2 = t2 + obj2.offsetHeight;
+		
+		if(r1 < l2 || b1 < t2 || l1 > r2 || t1 > b2){
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	
+});
+</script>
+</head>
+
+<body>
+
+<ul id="ul1">
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+</ul>
+
+</body>
+</html>

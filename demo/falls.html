@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>nxy</title>
+<style>
+*{ margin:0; padding:0; list-style:none; font-family: "微软雅黑","张海山锐线体简"}
+#div1{width:930px; margin: 0 auto;}
+#div1 ul{ width:300px; float: left; margin-right:10px; background:#999;}
+#div1 ul li{background:#333;margin-bottom:10px;}
+</style>
+<script>
+window.onload=function(){
+	function createLi(){
+		var oLi=document.createElement('li');
+		oLi.style.height=parseInt(50+Math.random()*(500-50))+'px';
+		return oLi;	
+	}
+	
+	var oDiv=document.getElementById('div1');
+	var aUl=oDiv.children;
+	
+	insertToUl(15);
+	function insertToUl(n){
+		for(var i=0;i<n;i++){
+			
+			var arr=[];
+			for(var j=0;j<aUl.length;j++){
+				arr.push(aUl[j]);	
+			}
+			arr.sort(function(n1,n2){return n1.offsetHeight-n2.offsetHeight});
+			arr[0].appendChild(createLi());
+		}		
+	}
+		
+	window.onscroll=function(){
+		var scrTop=document.documentElement.scrollTop||document.body.scrollTop;
+		var cH=document.documentElement.clientHeight;
+		if(scrTop+cH>=document.body.scrollHeight){
+			alert('到底了');
+			insertToUl(5);	
+		}
+	};
+};
+</script>
+</head>
+
+<body>
+
+<div id="div1">
+	<ul>
+<!--    	<li style="height:200px"></li>
+    	<li style="height:100px"></li>
+-->    </ul>
+	<ul>
+<!--    	<li style="height:50px"></li>
+    	<li style="height:120px"></li>
+    	<li style="height:60px"></li>
+-->    </ul>
+	<ul>
+<!--    	<li style="height:500px"></li>
+-->    </ul>
+</div>
+
+</body>
+</html>

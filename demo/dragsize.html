@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>nxy</title>
+<style>
+*{ margin:0; padding:0; list-style:none; font-family: "微软雅黑","张海山锐线体简"}
+#div1{width:500px;height:350px;background:#ccc; position:absolute;left:200px;top:80px;}
+.l{width:10px;height:100%; position:absolute;left:0;top:0; background:green;}
+.t{width:100%;height:10px; position:absolute;left:0;top:0; background:green;}
+.r{width:10px;height:100%; position:absolute;right:0;top:0; background:green;}
+.b{width:100%;height:10px; position:absolute;left:0;bottom:0; background:green;}
+.lt{width:10px;height:10px; position:absolute;left:0;top:0; background:red;}
+.rt{width:10px;height:10px; position:absolute;right:0;top:0; background:red;}
+.rb{width:10px;height:10px; position:absolute;right:0;bottom:0; background:red;}
+.lb{width:10px;height:10px; position:absolute;left:0;bottom:0; background:red;}
+.title{width:100%;height:10px; position:absolute;left:0;top:10px; background:blue;}
+</style>
+<script>
+window.onload=function(){
+	var oDiv=document.getElementById('div1');
+	var aDiv=oDiv.children;
+	
+	for(var i=0;i<aDiv.length;i++){
+		drag(aDiv[i]);	
+	}
+	
+	function drag(obj){
+		obj.onmousedown=function(ev){
+			var oEvt=ev||event;
+			
+			var oldW=obj.parentNode.offsetWidth;
+			var oldH=obj.parentNode.offsetHeight;
+			
+			var oldX=oEvt.clientX;
+			var oldY=oEvt.clientY;
+			
+			var oldL=obj.parentNode.offsetLeft;
+			var oldT=obj.parentNode.offsetTop;
+			document.onmousemove=function(ev){
+				var oEvt=ev||event;
+				
+				var newX=oEvt.clientX;
+				var newY=oEvt.clientY;
+				
+				
+				if(obj.className.indexOf('l') != -1){
+					obj.parentNode.style.width=oldW+(oldX-newX)+'px';
+					obj.parentNode.style.left=oldL-(oldX-newX)+'px';
+				}
+				if(obj.className.indexOf('t') != -1){
+					obj.parentNode.style.height=oldH+(oldY-newY)+'px';
+					obj.parentNode.style.top=oldT-(oldY-newY)+'px';
+				}
+				if(obj.className.indexOf('r') != -1){
+					obj.parentNode.style.width=oldW+(newX-oldX)+'px';
+				}
+				if(obj.className.indexOf('b') != -1){
+					obj.parentNode.style.height=oldH+(newY-oldY)+'px';
+				}
+				
+			};
+			document.onmouseup=function(){
+				document.onmousemove=	document.onmouseup=null;
+			};
+			
+			return false;
+		};
+	}
+};
+</script>
+</head>
+
+<body>
+
+<div id="div1">
+	<div class="h"></div>
+	<div class="l"></div>
+	<div class="t"></div>
+	<div class="r"></div>
+	<div class="b"></div>
+    <div class="lt"></div>
+    <div class="rt"></div>
+    <div class="rb"></div>
+    <div class="lb"></div>
+    
+</div>
+
+</body>
+</html>
