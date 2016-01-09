@@ -1,8 +1,0 @@
-@charset "utf-8";
-/* CSS Document */
-body{margin:0;padding:0;list-style:none;}
-
-.fl{float:left;}
-.fr{float:right;}
-
-#div{width:200px;height:200px;position:relative;}
